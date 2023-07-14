@@ -5,6 +5,7 @@ export type IBook = {
   genre: string;
   publicationDate: Date;
   reviews: IReview[];
+  wishList?: boolean;
 };
 
 export type IAuthor = {
