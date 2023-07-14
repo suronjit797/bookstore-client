@@ -22,7 +22,7 @@ function Header() {
   };
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className="bg-dark-subtle">
       <Container>
         <NavLink to="/" className="navbar-brand">
           <div className="fw-bold">
