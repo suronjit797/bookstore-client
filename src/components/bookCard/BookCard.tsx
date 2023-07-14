@@ -1,11 +1,18 @@
-// import React from 'react';
+import React, { useState } from "react";
 import { IBook } from "../../interface/bookInterface";
 import Card from "react-bootstrap/Card";
 import moment from "moment";
-import { AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./bookCard.css";
+import { Link } from "react-router-dom";
 
 const BookCard = ({ book }: { book: IBook }) => {
+  const [wishList, setWishList] = useState<boolean>(false);
+
+  const wishListHandler = () => {
+    ''
+  }
+
   return (
     <>
       <Card className="w-100 bookCard">
@@ -16,24 +23,30 @@ const BookCard = ({ book }: { book: IBook }) => {
             style={{ height: "300px", position: "relative" }}
           />
         </div>
-        <Card.Body>
-          <Card.Title> {book.title} </Card.Title>
-          <Card.Text>
-            <div className="d-flex text-capitalize">
-              <b className="me-2">Author: </b> <span> {book.author.name} </span>
-            </div>
-            <div className="d-flex text-capitalize">
-              <b className="me-2">genre: </b> <span> {book.genre} </span>
-            </div>
-            <div className="d-flex text-capitalize">
-              <b className="me-2">Publication: </b>{" "}
-              <span> {moment(book.publicationDate).format("DD/MM/YYYY")} </span>
-            </div>
-            <div className="wishLIst fs-4">
-              <AiOutlineHeart />
-            </div>
-          </Card.Text>
-        </Card.Body>
+        <div className="wishLIst fs-4" onClick={wishListHandler}>
+          {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
+        </div>
+        <Link
+          to={`/book/${book?._id ? book?._id : ""}`}
+          className="text-black text-capitalize"
+        >
+          <Card.Body>
+            <Card.Title> {book.title} </Card.Title>
+            <Card.Text>
+              <div className="d-flex">
+                <b className="me-2">Author: </b>
+                <span> {book.author.name} </span>
+              </div>
+              <div className="d-flex">
+                <b className="me-2">genre: </b> <span> {book.genre} </span>
+              </div>
+              <div className="d-flex">
+                <b className="me-2">Publication: </b>
+                <span>{moment(book.publicationDate).format("DD/MM/YYYY")}</span>
+              </div>
+            </Card.Text>
+          </Card.Body>
+        </Link>
       </Card>
     </>
   );

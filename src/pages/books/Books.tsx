@@ -20,10 +20,14 @@ const Books = () => {
     return <Loading />;
   }
 
+  if (error) {
+    console.log(error);
+  }
+
   return (
     <Layout>
       <Container>
-        <Row xs={1} sm={2} md={3} lg={4} className='my-3'>
+        <Row xs={1} sm={2} md={3} lg={4} className="my-3">
           {books.length > 0 &&
             books.map((book) => (
               <Col key={book._id}>
