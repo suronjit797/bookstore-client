@@ -27,8 +27,7 @@ const Home = () => {
 
       <div className="my-4">
         <h2 className="text-center heading">
-          {" "}
-          <span> Recent Added </span>{" "}
+          <span> Recent Added </span>
         </h2>
       </div>
       <Container>
