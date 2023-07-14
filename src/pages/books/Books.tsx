@@ -1,10 +1,11 @@
+import Layout from "../../layouts/Layout";
 
 
 const Books = () => {
     return (
-        <div>
+        <Layout>
             books
-        </div>
+        </Layout>
     );
 };
 
