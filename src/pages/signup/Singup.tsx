@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostRegisterMutation } from "../../redux/features/user/userApi";
 import Swal from "sweetalert2";
+import { IErrorPayload } from "../../interface/authInterface";
 
 type TFormData = {
   name: string;
@@ -12,13 +13,6 @@ type TFormData = {
   cPassword: string;
 };
 
-export type IErrorPayload = {
-  success: boolean;
-  message: string;
-  errorMessages: [];
-  stack?: unknown;
-  statusCode?: number;
-};
 
 const initialState = {
   name: "",
@@ -71,6 +65,7 @@ const Signup: React.FC = () => {
         const error: IErrorPayload = response.error as IErrorPayload;
         setErrorMessage(error.message);
       } else {
+        setErrorMessage(null);
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         Toast.fire({
           icon: "success",

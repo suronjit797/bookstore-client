@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 import { Link, useNavigate } from "react-router-dom";
 import { usePostLoginMutation } from "../../redux/features/user/userApi";
 import Swal from "sweetalert2";
+import { IErrorPayload } from "../../interface/authInterface";
 
 type TFormData = {
   email: string;
@@ -29,13 +30,14 @@ const Signin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<TFormData>(initialState);
   const [loginPost] = usePostLoginMutation();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +71,11 @@ const Signin = () => {
 
       localStorage.setItem("token", data.accessToken);
       navigate("/");
+      setErrorMessage(null);
+    }
+    if ("error" in res) {
+      const error: IErrorPayload = res.error as IErrorPayload;
+      setErrorMessage(error.message);
     }
   };
 
@@ -108,6 +115,10 @@ const Signin = () => {
                 required
               />
             </Form.Group>
+
+            <div className="invalid-feedback d-block fw-bold">
+              {errorMessage}
+            </div>
 
             <button className="btn" type="submit">
               Login
