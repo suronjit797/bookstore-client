@@ -7,7 +7,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 function Header() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -18,7 +18,8 @@ function Header() {
 
   const logoutHandler = () => {
     localStorage.clear();
-    navigate('/signin')
+    setIsLogin(false);
+    navigate("/signin");
   };
 
   return (
@@ -40,8 +41,7 @@ function Header() {
             </NavLink>
             {isLogin ? (
               <Button onClick={logoutHandler} variant="danger">
-                {" "}
-                Logout{" "}
+                Logout
               </Button>
             ) : (
               <NavLink to="/signin" className="nav-link text-capitalize">
