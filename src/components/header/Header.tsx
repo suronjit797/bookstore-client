@@ -11,7 +11,7 @@ function Header() {
       <Container>
         <NavLink to="/" className="navbar-brand">
           <div className="fw-bold">
-            Books<span className="text-bg-primary">Bazar</span>
+            Books<span className="text-bg-primary pe-1 ">Bazar</span>
           </div>
         </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
