@@ -31,7 +31,7 @@ const Signup: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<TFormData>(initialState);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [registerPost, result] = usePostRegisterMutation();
+  const [registerPost] = usePostRegisterMutation();
   const { name, email, password, cPassword } = formData;
 
   const Toast = Swal.mixin({
@@ -51,6 +51,7 @@ const Signup: React.FC = () => {
     if (token) {
       navigate("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {

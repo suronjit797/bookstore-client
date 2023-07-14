@@ -28,13 +28,14 @@ const initialState = {
 const Signin = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<TFormData>(initialState);
-  const [loginPost, result] = usePostLoginMutation();
+  const [loginPost] = usePostLoginMutation();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/");
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {

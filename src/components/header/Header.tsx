@@ -1,10 +1,25 @@
+import { useState, useEffect } from "react";
+import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Header() {
-  const isLogin = false;
+  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLogin(true);
+    }
+  }, []);
+
+  const logoutHandler = () => {
+    localStorage.clear();
+    navigate('/signin')
+  };
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -24,9 +39,10 @@ function Header() {
               books
             </NavLink>
             {isLogin ? (
-              <NavLink to="/signup" className="nav-link text-capitalize">
-                Sign Up
-              </NavLink>
+              <Button onClick={logoutHandler} variant="danger">
+                {" "}
+                Logout{" "}
+              </Button>
             ) : (
               <NavLink to="/signin" className="nav-link text-capitalize">
                 Sign In
