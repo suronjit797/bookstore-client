@@ -8,7 +8,7 @@ import { useGetBooksQuery } from "../../redux/features/books/bookApi";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import './home.css'
+import "./home.css";
 
 const Home = () => {
   const { data, isLoading, error } = useGetBooksQuery("limit=10");
@@ -24,8 +24,15 @@ const Home = () => {
   return (
     <Layout>
       <div className="banner"></div>
+
+      <div className="my-4">
+        <h2 className="text-center heading">
+          {" "}
+          <span> Recent Added </span>{" "}
+        </h2>
+      </div>
       <Container>
-        <Row xs={1} sm={2} md={3} lg={4} className="my-3">
+        <Row xs={1} sm={2} md={3} lg={4} className="my-3 g-4">
           {books.length > 0 &&
             books.map((book) => (
               <Col key={book._id}>
