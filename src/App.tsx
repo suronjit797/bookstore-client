@@ -7,6 +7,7 @@ import Book from "./pages/book/Book";
 import NotFound from "./pages/notFound/NotFound";
 import Signin from "./pages/signin/SignIn";
 import Signup from "./pages/signup/Singup";
+import Wishlist from "./pages/wishlist/Wishlist";
 
 const App = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const App = createBrowserRouter([
   {
     path: "/books",
     element: <Books />,
+  },
+  {
+    path: "/wishlist",
+    element: <Wishlist />,
   },
   {
     path: "/book/:bookId",

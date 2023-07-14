@@ -39,8 +39,11 @@ function Header() {
             <NavLink to="/books" className="nav-link text-capitalize">
               books
             </NavLink>
+            <NavLink to="/wishlist" className="nav-link text-capitalize">
+              wishlist
+            </NavLink>
             {isLogin ? (
-              <Button onClick={logoutHandler} variant="danger">
+              <Button className="ms-2" onClick={logoutHandler} variant="danger">
                 Logout
               </Button>
             ) : (

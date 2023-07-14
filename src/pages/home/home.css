@@ -1,0 +1,6 @@
+.banner{
+    background-image: url('/images/banner.jpeg');
+    background-color: rgba(0, 0, 0, 0.384);
+    background-blend-mode: multiply;
+    height: calc(100vh - 50px);
+}
