@@ -1,17 +1,30 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { IBook } from "../../interface/bookInterface";
 import Card from "react-bootstrap/Card";
 import moment from "moment";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./bookCard.css";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { toggleWishlist } from "../../redux/features/wishList/wishListSlice";
 
 const BookCard = ({ book }: { book: IBook }) => {
+  const dispatch = useAppDispatch();
+  const { books } = useAppSelector((state) => state.wishlist);
   const [wishList, setWishList] = useState<boolean>(false);
 
+  useEffect(() => {
+    const isExist = books.find((b) => b._id === book._id);
+    if (isExist) {
+      setWishList(true);
+    } else {
+      setWishList(false);
+    }
+  }, [books, book._id]);
+
   const wishListHandler = () => {
-    ''
-  }
+    dispatch(toggleWishlist(book));
+  };
 
   return (
     <>
@@ -23,7 +36,10 @@ const BookCard = ({ book }: { book: IBook }) => {
             style={{ height: "300px", position: "relative" }}
           />
         </div>
-        <div className="wishLIst fs-4" onClick={wishListHandler}>
+        <div
+          className="wishLIst fs-4"
+          onClick={wishListHandler}
+        >
           {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
         </div>
         <Link
