@@ -24,12 +24,12 @@ function Header() {
               books
             </NavLink>
             {isLogin ? (
-              <NavLink to="/signin" className="nav-link text-capitalize">
-                Sign In
-              </NavLink>
-            ) : (
               <NavLink to="/signup" className="nav-link text-capitalize">
                 Sign Up
+              </NavLink>
+            ) : (
+              <NavLink to="/signin" className="nav-link text-capitalize">
+                Sign In
               </NavLink>
             )}
           </Nav>

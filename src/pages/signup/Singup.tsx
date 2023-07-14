@@ -1,91 +1,167 @@
-import { ChangeEvent, FormEvent } from "react";
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { usePostRegisterMutation } from "../../redux/features/user/userApi";
+import Swal from "sweetalert2";
 
+type TFormData = {
+  name: string;
+  email: string;
+  password: string;
+  cPassword: string;
+};
 
-const Signup = () => {
-    const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.name, e.target.value);
-      };
-    
-      const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-      };
-    
-      return (
-        <div className="user_form">
-          <div className="container py-4 m-auto">
-            <div className="user_form-body">
-              <h4 className="fw-bold text-center  mb-3">
-                Books<span className="text_bg-primary pe-1">Bazar</span>
-              </h4>
-    
-              <Form onSubmit={submitHandler}>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <label htmlFor="name" className="text-capitalize mb-2">
-                    full name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Full name"
-                    onChange={changeHandler}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <label htmlFor="name" className="text-capitalize mb-2">
-                    email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="email"
-                    onChange={changeHandler}
-                    required
-                  />
-                </Form.Group>
-    
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <label htmlFor="name" className="text-capitalize mb-2">
-                    password
-                  </label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Password"
-                    onChange={changeHandler}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <label htmlFor="name" className="text-capitalize mb-2">
-                    confirm password
-                  </label>
-                  <input
-                    type="password"
-                    id="cPassword"
-                    name="cPassword"
-                    placeholder="Confirm Password"
-                    onChange={changeHandler}
-                    required
-                  />
-                </Form.Group>
-    
-                <button className="btn" type="submit">
-                  Register
-                </button>
-              </Form>
-              <div className="mt-4">
-                Already have an account? <Link to='/signin'>  Login now</Link>
-              </div>
+export type IErrorPayload = {
+  success: boolean;
+  message: string;
+  errorMessages: [];
+  stack?: unknown;
+  statusCode?: number;
+};
+
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  cPassword: "",
+};
+
+const Signup: React.FC = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<TFormData>(initialState);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [registerPost, result] = usePostRegisterMutation();
+  const { name, email, password, cPassword } = formData;
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
+  const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const submitHandler = async (e: FormEvent<HTMLFormElement>):Promise<void> => {
+    e.preventDefault();
+    if (password !== cPassword) {
+      return setErrorMessage("Passwords do not match");
+    }
+    setErrorMessage(null);
+
+    try {
+      const response = await registerPost({ name, email, password });
+      if ("error" in response) {
+        const error: IErrorPayload = response.error as IErrorPayload;
+        setErrorMessage(error.message);
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        Toast.fire({
+          icon: "success",
+          title: "Signed up successfully",
+        });
+        navigate("/signin");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="user_form">
+      <div className="container py-4 m-auto">
+        <div className="user_form-body">
+          <h4 className="fw-bold text-center  mb-3">
+            Books<span className="text_bg-primary pe-1">Bazar</span>
+          </h4>
+
+          <Form onSubmit={submitHandler}>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <label htmlFor="name" className="text-capitalize mb-2">
+                full name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Full name"
+                onChange={changeHandler}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicEmail">
+              <label htmlFor="name" className="text-capitalize mb-2">
+                email
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="email"
+                onChange={changeHandler}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <label htmlFor="name" className="text-capitalize mb-2">
+                password
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Password"
+                onChange={changeHandler}
+                minLength={6}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <label htmlFor="name" className="text-capitalize mb-2">
+                confirm password
+              </label>
+              <input
+                type="password"
+                id="cPassword"
+                name="cPassword"
+                placeholder="Confirm Password"
+                minLength={6}
+                onChange={changeHandler}
+                required
+              />
+            </Form.Group>
+
+            <div className="invalid-feedback d-block fw-bold">
+              {errorMessage}
             </div>
+
+            <button className="btn" type="submit">
+              Register
+            </button>
+          </Form>
+          <div className="mt-4">
+            Already have an account? <Link to="/signin"> Login now</Link>
           </div>
         </div>
-      );
-    };
+      </div>
+    </div>
+  );
+};
 
 export default Signup;

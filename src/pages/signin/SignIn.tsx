@@ -1,14 +1,74 @@
-import { ChangeEvent, FormEvent } from "react";
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { usePostLoginMutation } from "../../redux/features/user/userApi";
+import Swal from "sweetalert2";
+
+type TFormData = {
+  email: string;
+  password: string;
+};
+
+type TResponse = {
+  data: {
+    accessToken: string;
+  };
+  message: string;
+  statusCode: number | string;
+  success: boolean;
+};
+
+const initialState = {
+  email: "",
+  password: "",
+};
 
 const Signin = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<TFormData>(initialState);
+  const [loginPost, result] = usePostLoginMutation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.name, e.target.value);
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-end",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener("mouseenter", Swal.stopTimer);
+      toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+  });
+
+  const submitHandler = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
+    const res = await loginPost(formData);
+    if ("data" in res) {
+      const { data, message } = res.data as TResponse;
+
+      Toast.fire({
+        icon: "success",
+        title: message,
+      });
+
+      localStorage.setItem("token", data.accessToken);
+      navigate("/");
+    }
   };
 
   return (
@@ -48,13 +108,12 @@ const Signin = () => {
               />
             </Form.Group>
 
-
             <button className="btn" type="submit">
               Login
             </button>
           </Form>
           <div className="mt-4">
-            Don;t have an account? <Link to='/signup'>  Register now</Link>
+            Don;t have an account? <Link to="/signup"> Register now</Link>
           </div>
         </div>
       </div>
