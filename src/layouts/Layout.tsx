@@ -1,3 +1,5 @@
+import Footer from "../components/footer/Footer";
+import Header from "../components/header/Header";
 import "./layout.css";
 import React, { ReactNode } from "react";
 
@@ -8,9 +10,9 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <div className="layout">
-      <header className="header"></header>
+      <Header />
       <main> {children} </main>
-      <footer></footer>
+      <Footer />
     </div>
   );
 };
