@@ -3,6 +3,7 @@ import { FormEvent, useState, useEffect } from "react";
 import { Form } from "react-router-dom";
 import { IBook, IReview } from "../../interface/bookInterface";
 import { useUpdateBooksMutation } from "../../redux/features/books/bookApi";
+import Swal from "sweetalert2";
 
 const Comments = ({ book }: { book: IBook }) => {
   const [reviewList, setReviewList] = useState<IReview[]>([]);
@@ -11,24 +12,26 @@ const Comments = ({ book }: { book: IBook }) => {
   const [updateReviewList] = useUpdateBooksMutation();
 
   useEffect(() => {
-    setReviewList(book.reviews);
+    setReviewList([...book.reviews]?.reverse().slice(0, 10));
   }, [book]);
 
   const submitHandler = async (
     e: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-    const updatedBook:IBook = {
+    const updatedBook: IBook = {
       ...book,
       reviews: [...book.reviews, { comment, user: book.author }],
     };
     await updateReviewList({ id: book._id as string, data: updatedBook });
+    setComment("");
   };
   return (
     <div className="my-3">
       <Form className="d-flex" onSubmit={submitHandler}>
         <input
           type="text"
+          value={comment}
           onChange={(e) => setComment(e.target.value)}
           className="form-control rounded-0"
         />
@@ -37,9 +40,19 @@ const Comments = ({ book }: { book: IBook }) => {
         </button>
       </Form>
 
-      {reviewList.map((review) => (
-        <div>{review.comment}</div>
-      ))}
+      {reviewList.length > 0 &&
+        reviewList?.map((review) => (
+          <div className="d-flex align-item-center bg-light my-3 p-3 rounded-3  gap-3">
+            <div
+              className="avatar rounded-circle bg-dark bg-dark-subtle"
+              style={{ height: "50px", width: "50px" }}
+            ></div>
+            <div className="text">
+              <h6 className="text-capitalize mb-0"> {review.user} </h6>
+              <p className="mb-0"> {review.comment} </p>
+            </div>
+          </div>
+        ))}
     </div>
   );
 };
