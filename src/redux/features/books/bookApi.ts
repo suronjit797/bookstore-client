@@ -49,11 +49,22 @@ export const productApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getBooks: builder.query<TBook, string>({
       query: (params: string) => `/books?${params}`,
+      providesTags: ["books"],
     }),
     getYears: builder.query<TYear, string>({
       query: (params: string) => `/books/year?${params}`,
     }),
+    updateBooks: builder.mutation({
+      query: ({ id, data }: { id: string; data: IBook }) => ({
+        url: `/books/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      transformErrorResponse: (response) => response.data,
+      invalidatesTags: ["books"],
+    }),
   }),
 });
 
-export const { useGetBooksQuery, useGetYearsQuery } = productApi;
+export const { useGetBooksQuery, useGetYearsQuery, useUpdateBooksMutation } =
+  productApi;

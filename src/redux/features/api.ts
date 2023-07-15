@@ -13,7 +13,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  // tagTypes: ["comments"],
+  tagTypes: ["books"],
 
   endpoints: () => ({}),
 });

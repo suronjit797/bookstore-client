@@ -8,11 +8,14 @@ import "./bookCard.css";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { toggleWishlist } from "../../redux/features/wishList/wishListSlice";
+import { useUpdateBooksMutation } from "../../redux/features/books/bookApi";
 
 const BookCard = ({ book }: { book: IBook }) => {
   const dispatch = useAppDispatch();
   const { books } = useAppSelector((state) => state.wishlist);
   const [wishList, setWishList] = useState<boolean>(false);
+
+  const [updateIsFinished] = useUpdateBooksMutation();
 
   useEffect(() => {
     const isExist = books.find((b) => b._id === book._id);
@@ -60,22 +63,34 @@ const BookCard = ({ book }: { book: IBook }) => {
         </Link>
         <div className="p-3 pt-0 d-flex justify-content-end">
           <div className="d-flex">
-            <div
-              className="wishLIst fs-2 me-2"
-              title="Add to wish list"
-              onClick={wishListHandler}
-            >
-              {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
+            <div className="wishLIst fs-2 me-2" onClick={wishListHandler}>
+              {wishList ? (
+                <AiFillHeart title="Remove wish list" />
+              ) : (
+                <AiOutlineHeart title="Add to wish list" />
+              )}
             </div>
             <div
               className="finishBook fs-2"
-              title="Add to wish list"
               // onClick={wishListHandler}
             >
               {book?.isFinished ? (
-                <BsBookmarkCheckFill className="text-success" />
+                <BsBookmarkCheckFill
+                  className="text-success"
+                  title="Finished"
+                />
               ) : (
-                <BsBookmarkXFill className="text-danger" />
+                <BsBookmarkXFill
+                  className="text-danger"
+                  title="Add to Finished"
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    updateIsFinished({
+                      id: book._id as string,
+                      data: { ...book, isFinished: true },
+                    })
+                  }
+                />
               )}
             </div>
           </div>
