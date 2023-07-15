@@ -14,7 +14,8 @@
   color: #fff;
 }
 
-.user_form input {
+.user_form input,
+.user_form select {
   background-color: #0e2d3f;
   display: block;
   width: 100%;

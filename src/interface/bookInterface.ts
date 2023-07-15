@@ -21,3 +21,10 @@ export type IReview = {
   user: string;
   comment: string;
 };
+
+
+export type TCreateBook = {
+  title: string;
+  genre: string;
+  publicationDate: Date;
+};

@@ -10,8 +10,14 @@
   -webkit-text-size-adjust: 100%;
 }
 
-#root{
+#root {
   height: 100vh;
+}
+
+::placeholder,
+option,
+select {
+  text-transform: capitalize;
 }
 
 a {
@@ -33,7 +39,7 @@ body,
   flex-direction: column;
 }
 
-.text_bg-primary{
+.text_bg-primary {
   background-color: #3cc4c0;
   color: black;
 }

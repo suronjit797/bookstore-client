@@ -3,7 +3,6 @@ import { FormEvent, useState, useEffect } from "react";
 import { Form } from "react-router-dom";
 import { IBook, IReview } from "../../interface/bookInterface";
 import { useUpdateBooksMutation } from "../../redux/features/books/bookApi";
-import Swal from "sweetalert2";
 
 const Comments = ({ book }: { book: IBook }) => {
   const [reviewList, setReviewList] = useState<IReview[]>([]);

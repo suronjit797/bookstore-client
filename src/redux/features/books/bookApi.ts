@@ -1,4 +1,4 @@
-import { IBook } from "../../../interface/bookInterface";
+import { IBook, TCreateBook } from "../../../interface/bookInterface";
 import { IError } from "../../../interface/globalInterface";
 import { api } from "../api";
 
@@ -61,6 +61,15 @@ export const productApi = api.injectEndpoints({
     getYears: builder.query<TYear, string>({
       query: (params: string) => `/books/year?${params}`,
     }),
+    postBooks: builder.mutation<TBookSingle, Partial<TCreateBook>>({
+      query: (data: TCreateBook) => ({
+        url: `/books`,
+        method: "POST",
+        body: data,
+      }),
+      transformErrorResponse: (response) => response,
+      invalidatesTags: ["books"],
+    }),
     updateBooks: builder.mutation({
       query: ({ id, data }: { id: string; data: IBook }) => ({
         url: `/books/${id}`,
@@ -78,4 +87,5 @@ export const {
   useGetYearsQuery,
   useUpdateBooksMutation,
   useGetSingleBooksQuery,
+  usePostBooksMutation,
 } = productApi;
