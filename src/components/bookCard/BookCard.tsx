@@ -51,7 +51,7 @@ const BookCard = ({ book }: { book: IBook }) => {
             <Card.Text>
               <div className="d-flex">
                 <b className="me-2">Author: </b>
-                <span> {book.author.name} </span>
+                <span> {book.author} </span>
               </div>
               <div className="d-flex">
                 <b className="me-2">genre: </b> <span> {book.genre} </span>

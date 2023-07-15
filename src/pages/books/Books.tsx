@@ -15,7 +15,7 @@ const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [search, setSearch] = useState("");
   const { data, isLoading, error } = useGetBooksQuery(
-    `${searchTerm ? "searchTerm=" + searchTerm : ""}`
+    `${searchTerm ? "query=" + searchTerm : ""}`
   );
 
   const books: IBook[] = data?.data as IBook[];
@@ -36,8 +36,8 @@ const Books = () => {
   return (
     <Layout>
       <Container>
-        <div className="d-flex justify-content-between mt-4">
-          <h4> BookLists </h4>
+        <div className="d-flex justify-content-between align-items-center mt-4">
+          <h4 className="mb-0"> BookLists </h4>
           <form className="d-flex" onSubmit={searchHandler}>
             <input
               type="search"

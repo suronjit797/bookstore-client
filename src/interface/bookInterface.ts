@@ -1,7 +1,8 @@
 export type IBook = {
   _id?: string;
   title: string;
-  author: IAuthor;
+  author: string;
+  authorDetails: IAuthor;
   genre: string;
   publicationDate: Date;
   reviews: IReview[];
