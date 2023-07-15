@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
@@ -64,14 +63,14 @@ const Signin = () => {
     if ("data" in res) {
       const { data, message } = res.data as TResponse;
 
-      Toast.fire({
-        icon: "success",
-        title: message,
-      });
-
       localStorage.setItem("token", data.accessToken);
       navigate("/");
       setErrorMessage(null);
+
+      await Toast.fire({
+        icon: "success",
+        title: message,
+      });
     }
     if ("error" in res) {
       const error: IErrorPayload = res.error as IErrorPayload;

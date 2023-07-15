@@ -2,7 +2,6 @@ import { IBook } from "../../../interface/bookInterface";
 import { IError } from "../../../interface/globalInterface";
 import { api } from "../api";
 
-
 type TYear = {
   message: string;
   statusCode: number;
@@ -18,7 +17,7 @@ type TYear = {
     }
   | IError
 );
-type TBook = {
+export type TBook = {
   message: string;
   statusCode: number;
 } & (
@@ -33,7 +32,7 @@ type TBook = {
     }
   | IError
 );
-type TBookSingle = {
+export type TBookSingle = {
   message: string;
   statusCode: number;
 } & (
@@ -74,5 +73,9 @@ export const productApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetBooksQuery, useGetYearsQuery, useUpdateBooksMutation, useGetSingleBooksQuery } =
-  productApi;
+export const {
+  useGetBooksQuery,
+  useGetYearsQuery,
+  useUpdateBooksMutation,
+  useGetSingleBooksQuery,
+} = productApi;

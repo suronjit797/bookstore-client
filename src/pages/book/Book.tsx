@@ -1,18 +1,32 @@
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import Layout from "../../layouts/Layout";
 import { useGetSingleBooksQuery } from "../../redux/features/books/bookApi";
 import Loading from "../../components/Loading/Loading";
 import { Container } from "react-bootstrap";
 import moment from "moment";
+import Comments from "../../components/comments/Comments";
+import { IBook, IReview } from "../../interface/bookInterface";
+
+const initReview: IBook = {
+  _id: "",
+  title: "",
+  genre: "",
+  publicationDate: new Date(),
+  author: "",
+  authorDetails: {
+    _id: "",
+    name: "",
+    email: "",
+  },
+  reviews: [],
+  isFinished: true,
+};
 
 const Book = () => {
   const { bookId } = useParams();
 
   const { data: book, isLoading } = useGetSingleBooksQuery(bookId as string);
-
-  if (!book?.success) {
-    console.log(book?.message);
-  }
 
   return (
     <Layout>
@@ -50,6 +64,7 @@ const Book = () => {
             </div>
           </div>
         </div>
+        <Comments book={book?.success && book.data ? book.data : initReview} />
       </Container>
     </Layout>
   );
