@@ -32,14 +32,11 @@ const BookCard = ({ book }: { book: IBook }) => {
         <div className="bookImage">
           <Card.Img
             variant="top"
-            src="images/bookCover.webp"
+            src={book.image || "images/bookCover.webp"}
             style={{ height: "300px", position: "relative" }}
           />
         </div>
-        <div
-          className="wishLIst fs-4"
-          onClick={wishListHandler}
-        >
+        <div className="wishLIst fs-4" onClick={wishListHandler}>
           {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
         </div>
         <Link

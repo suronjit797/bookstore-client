@@ -1,0 +1,4 @@
+.book_sidebar{
+    height: calc(100vh - 135px);
+    border-right: 1px solid rgba(0, 0, 0, 0.329);
+}
