@@ -5,20 +5,8 @@ import Loading from "../../components/Loading/Loading";
 import { Container } from "react-bootstrap";
 import moment from "moment";
 import Comments from "../../components/comments/Comments";
-import { IBook } from "../../interface/bookInterface";
+import { initBook } from "../../shared/constants";
 
-const initBook: IBook = {
-  title: "",
-  genre: "",
-  publicationDate: new Date(),
-  author: "",
-  authorDetails: {
-    _id: "",
-    name: "",
-    email: "",
-  },
-  reviews: [],
-};
 
 const Book = () => {
   const { bookId } = useParams();

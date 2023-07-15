@@ -9,6 +9,7 @@ import Signin from "./pages/signin/SignIn";
 import Signup from "./pages/signup/Singup";
 import Wishlist from "./pages/wishlist/Wishlist";
 import AddNew from "./pages/addNew/AddNew";
+import UpdateBook from "./pages/updateBook/updateBook";
 
 const App = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const App = createBrowserRouter([
   {
     path: "/book/:bookId",
     element: <Book />,
+  },
+  {
+    path: "/update-book/:bookId",
+    element: <UpdateBook />,
   },
   {
     path: "add-new",

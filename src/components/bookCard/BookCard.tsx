@@ -47,7 +47,7 @@ const BookCard = ({ book }: { book: IBook }) => {
 
           <Card.Body className="pb-0">
             <Card.Title> {book.title} </Card.Title>
-            <Card.Text>
+            <div>
               <div className="d-flex">
                 <b className="me-2">Author: </b>
                 <span> {book.author} </span>
@@ -59,7 +59,7 @@ const BookCard = ({ book }: { book: IBook }) => {
                 <b className="me-2">Publication: </b>
                 <span>{moment(book.publicationDate).format("DD/MM/YYYY")}</span>
               </div>
-            </Card.Text>
+            </div>
           </Card.Body>
         </Link>
         <div className="p-3 pt-0 d-flex justify-content-end">

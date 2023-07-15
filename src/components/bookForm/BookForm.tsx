@@ -6,6 +6,7 @@ import { IErrorPayload } from "../../interface/authInterface";
 import { usePostBooksMutation } from "../../redux/features/books/bookApi";
 import { bookEnum } from "../../shared/constants";
 import { IBook } from "../../interface/bookInterface";
+import moment from "moment";
 
 type TResponse = {
   data: IBook;
@@ -32,16 +33,17 @@ type TProps = {
   data?: IBook;
 };
 
-const ProductForm = ({ mode, data }: TProps) => {
+const BookForm = ({ mode, data }: TProps) => {
   const [formData, setFormData] = useState<IBook>(initialState);
   const [createBook] = usePostBooksMutation();
 
   useEffect(() => {
+    // console.log(mode, data)
     if (mode === "edit" && data) {
       setFormData(data);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mode, data]);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -105,7 +107,9 @@ const ProductForm = ({ mode, data }: TProps) => {
 
   return (
     <div className="user_form py-4">
-      <h1 className="text-center"> Create a New Book </h1>
+      <h1 className="text-center">
+        {mode === "create" ? " Create a New Book" : "Update Book"}{" "}
+      </h1>
       <div className="container py-2 m-auto">
         <div className="user_form-body py-4">
           <Form onSubmit={submitHandler}>
@@ -147,7 +151,7 @@ const ProductForm = ({ mode, data }: TProps) => {
               </label>
               <input
                 type="date"
-                value={formData.publicationDate.toString()}
+                value={moment(formData.publicationDate).format("yyyy-MM-DD")}
                 id="publicationDate"
                 name="publicationDate"
                 placeholder="publicationDate"
@@ -166,4 +170,4 @@ const ProductForm = ({ mode, data }: TProps) => {
   );
 };
 
-export default ProductForm;
+export default BookForm;
