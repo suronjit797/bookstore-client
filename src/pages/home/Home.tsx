@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { useState, useEffect } from "react";
 import Layout from "../../layouts/Layout";
 import Loading from "../../components/Loading/Loading";
 import BookCard from "../../components/bookCard/BookCard";
@@ -9,14 +8,21 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./home.css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const { data, isLoading, error } = useGetBooksQuery("limit=10");
-  const books: IBook[] = data?.data as IBook[];
+  const [books, setBooks] = useState<IBook[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { data: book, isLoading, error } = useGetBooksQuery("limit=8");
+
+  useEffect(() => {
+    if (book?.success) {
+      setBooks(book?.data);
+      setLoading(isLoading);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [book]);
 
   if (error) {
     console.log(error);
@@ -24,14 +30,14 @@ const Home = () => {
   return (
     <Layout>
       <div className="banner"></div>
-
-      <div className="my-4">
+      {loading && <Loading />}
+      <div className="mt-4 mb-1">
         <h2 className="text-center heading">
           <span> Recent Added </span>
         </h2>
       </div>
       <Container>
-        <Row xs={1} sm={2} md={3} lg={4} className="my-3 g-4">
+        <Row xs={1} sm={2} md={3} lg={4} className="mb-4 mt-1 g-4">
           {books.length > 0 &&
             books.map((book) => (
               <Col key={book._id}>
@@ -39,6 +45,9 @@ const Home = () => {
               </Col>
             ))}
         </Row>
+        <div className="mb-4 text-center">
+          <Link to="/books"> Show more ... </Link>
+        </div>
       </Container>
     </Layout>
   );

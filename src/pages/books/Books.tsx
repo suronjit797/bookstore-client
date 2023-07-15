@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import Loading from "../../components/Loading/Loading";
 import BookCard from "../../components/bookCard/BookCard";
 import { IBook } from "../../interface/bookInterface";
@@ -12,26 +10,38 @@ import Col from "react-bootstrap/Col";
 import { BsSearch } from "react-icons/bs";
 import "./book.css";
 import BookSideBar from "../../components/bookSideBar/BookSideBar";
+import Pagination from "react-bootstrap/Pagination";
 
 const Books = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [genreFilter, setGenreFilter] = useState("");
   const [yearFilter, setYearFilter] = useState("");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [books, setBooks] = useState<IBook[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const { data, isLoading, error } = useGetBooksQuery(
-    // queryOption
+  const limit = 9;
+
+  const {
+    data: book,
+    isLoading,
+    error,
+    isFetching,
+  } = useGetBooksQuery(
     `${genreFilter ? "genre=" + genreFilter + "&" : ""}${
       yearFilter ? "publicationDate=" + yearFilter + "&" : ""
-    }query=${searchTerm} 
-    `
+    }query=${searchTerm}&limit=${limit}&page=${page}`
   );
 
-  const books: IBook[] = data?.data as IBook[];
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  useEffect(() => {
+    if (book?.success) {
+      setBooks(book?.data);
+      setTotal(Number(book?.meta?.total));
+      setLoading(isLoading);
+    }
+  }, [book]);
 
   if (error) {
     console.log(error);
@@ -39,12 +49,31 @@ const Books = () => {
 
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     setSearchTerm(search);
   };
+
+  const items: JSX.Element[] = [];
+  console.log(total / limit);
+  for (let number = 1; number <= Math.ceil(total / limit); number++) {
+    items.push(
+      <Pagination.Item
+        key={number}
+        active={number === page}
+        onClick={() => {
+          setLoading(true);
+          setPage(number);
+        }}
+      >
+        {number}
+      </Pagination.Item>
+    );
+  }
 
   return (
     <Layout>
       <Container fluid>
+        {(loading || isFetching) && <Loading />}
         <div className="d-flex justify-content-between align-items-center mt-4">
           <h4 className="mb-0"> BookLists </h4>
           <form className="d-flex" onSubmit={searchHandler}>
@@ -67,11 +96,12 @@ const Books = () => {
               <BookSideBar
                 setGenreFilter={setGenreFilter}
                 setYearFilter={setYearFilter}
+                setPage={setPage}
               />
             </div>
           </Col>
           <Col lg={10} md={9}>
-            <Row xs={1} sm={2} md={2} lg={3} className="my-3 g-4">
+            <Row xs={1} sm={2} md={2} lg={3} className="mb-3 mt-1 g-4">
               {books.length > 0 &&
                 books.map((book) => (
                   <Col key={book._id}>
@@ -79,6 +109,10 @@ const Books = () => {
                   </Col>
                 ))}
             </Row>
+
+            <div className="my-4">
+              {total > limit && <Pagination>{items}</Pagination>}
+            </div>
           </Col>
         </Row>
       </Container>

@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useNavigate } from "react-router-dom";
+import './header.css'
 
 function Header() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -23,8 +24,8 @@ function Header() {
   };
 
   return (
-    <Navbar expand="lg" className="bg-dark-subtle">
-      <Container>
+    <Navbar expand="md" className="bg-dark-subtle">
+      <Container fluid>
         <NavLink to="/" className="navbar-brand">
           <div className="fw-bold">
             Books<span className="text-bg-primary pe-1 ">Bazar</span>
@@ -32,7 +33,7 @@ function Header() {
         </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ms-auto">
+          <Nav className="ms-auto align-items-center">
             <NavLink to="/" className="nav-link text-capitalize">
               Home
             </NavLink>
@@ -43,9 +44,18 @@ function Header() {
               wishlist
             </NavLink>
             {isLogin ? (
-              <Button className="ms-2" onClick={logoutHandler} variant="danger">
-                Logout
-              </Button>
+              <>
+                <NavLink to="/add-new" className="nav-link text-capitalize">
+                  add new book
+                </NavLink>
+                <Button
+                  className="ms-2"
+                  onClick={logoutHandler}
+                  variant="danger"
+                >
+                  Logout
+                </Button>
+              </>
             ) : (
               <NavLink to="/signin" className="nav-link text-capitalize">
                 Sign In

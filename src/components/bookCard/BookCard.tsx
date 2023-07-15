@@ -36,7 +36,7 @@ const BookCard = ({ book }: { book: IBook }) => {
             style={{ height: "300px", position: "relative" }}
           />
         </div>
-        <div className="wishLIst fs-4" onClick={wishListHandler}>
+        <div className="wishLIst fs-2" title='Add to wish list' onClick={wishListHandler}>
           {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
         </div>
         <Link
