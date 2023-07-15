@@ -33,17 +33,18 @@ const BookCard = ({ book }: { book: IBook }) => {
   return (
     <>
       <Card className="w-100 bookCard">
-        <div className="bookImage">
-          <Card.Img
-            variant="top"
-            src={book.image || "images/bookCover.webp"}
-            style={{ height: "300px", position: "relative" }}
-          />
-        </div>
         <Link
           to={`/book/${book?._id ? book?._id : ""}`}
           className="text-black text-capitalize"
         >
+          <div className="bookImage">
+            <Card.Img
+              variant="top"
+              src={book.image || "images/bookCover.webp"}
+              style={{ height: "300px", position: "relative" }}
+            />
+          </div>
+
           <Card.Body className="pb-0">
             <Card.Title> {book.title} </Card.Title>
             <Card.Text>

@@ -8,7 +8,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BsSearch } from "react-icons/bs";
-import "./book.css";
+import "./books.css";
 import BookSideBar from "../../components/bookSideBar/BookSideBar";
 import Pagination from "react-bootstrap/Pagination";
 
