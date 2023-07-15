@@ -9,7 +9,8 @@ import Signin from "./pages/signin/SignIn";
 import Signup from "./pages/signup/Singup";
 import Wishlist from "./pages/wishlist/Wishlist";
 import AddNew from "./pages/addNew/AddNew";
-import UpdateBook from "./pages/updateBook/updateBook";
+import UpdateBook from "./pages/updateBook/UpdateBook";
+import AuthRoute from "./components/authRoute/AuthRoute";
 
 const App = createBrowserRouter([
   {
@@ -30,11 +31,19 @@ const App = createBrowserRouter([
   },
   {
     path: "/update-book/:bookId",
-    element: <UpdateBook />,
+    element: (
+      <AuthRoute>
+        <UpdateBook />
+      </AuthRoute>
+    ),
   },
   {
     path: "add-new",
-    element: <AddNew />,
+    element: (
+      <AuthRoute>
+        <AddNew />
+      </AuthRoute>
+    ),
   },
   {
     path: "/signin",

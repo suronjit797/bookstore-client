@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePostLoginMutation } from "../../redux/features/user/userApi";
 import Swal from "sweetalert2";
 import { IErrorPayload } from "../../interface/authInterface";
+import { MdKeyboardBackspace } from "react-icons/md";
 
 type TFormData = {
   email: string;
@@ -125,6 +126,15 @@ const Signin = () => {
           </Form>
           <div className="mt-4">
             Don;t have an account? <Link to="/signup"> Register now</Link>
+          </div>
+
+          <div className="text-center">
+            <div
+              className="btn btn-info px-5 mt-3"
+              onClick={() => navigate("/")}
+            >
+              Go Home
+            </div>
           </div>
         </div>
       </div>

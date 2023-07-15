@@ -3,10 +3,16 @@ import { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Swal from "sweetalert2";
 import { IErrorPayload } from "../../interface/authInterface";
-import { usePostBooksMutation } from "../../redux/features/books/bookApi";
+import {
+  TBookSingle,
+  usePostBooksMutation,
+  useUpdateBooksMutation,
+} from "../../redux/features/books/bookApi";
 import { bookEnum } from "../../shared/constants";
 import { IBook } from "../../interface/bookInterface";
 import moment from "moment";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
+import { SerializedError } from "@reduxjs/toolkit";
 
 type TResponse = {
   data: IBook;
@@ -36,6 +42,7 @@ type TProps = {
 const BookForm = ({ mode, data }: TProps) => {
   const [formData, setFormData] = useState<IBook>(initialState);
   const [createBook] = usePostBooksMutation();
+  const [updateBook] = useUpdateBooksMutation();
 
   useEffect(() => {
     // console.log(mode, data)
@@ -65,14 +72,31 @@ const BookForm = ({ mode, data }: TProps) => {
     },
   });
 
-  const createBookFunction = async (): Promise<void> => {
+  const submitHandler = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
     try {
       const data = {
         ...formData,
         publicationDate: new Date(formData.publicationDate),
       };
-      const res = await createBook(data);
-      if ("data" in res) {
+      let res:
+        | {
+            data: TBookSingle;
+          }
+        | {
+            error: FetchBaseQueryError | SerializedError;
+          };
+      if (mode === "create") {
+        res = await createBook(data);
+        setFormData(initialState);
+      } else if (data?._id) {
+        const id = data?._id;
+        res = await updateBook({ id, data });
+      }
+
+      if (res! && "data" in res) {
         const { message } = res.data as TResponse;
 
         await Toast.fire({
@@ -80,14 +104,13 @@ const BookForm = ({ mode, data }: TProps) => {
           title: message,
         });
       }
-      if ("error" in res) {
+      if (res! && "error" in res) {
         const error = res.error as IErrorPayload;
         await Toast.fire({
           icon: "error",
           title: error.message || "Server error occurred",
         });
       }
-      setFormData(initialState);
     } catch (error) {
       await Toast.fire({
         icon: "error",
@@ -96,19 +119,10 @@ const BookForm = ({ mode, data }: TProps) => {
     }
   };
 
-  const submitHandler = async (
-    e: FormEvent<HTMLFormElement>
-  ): Promise<void> => {
-    e.preventDefault();
-    if (mode === "create") {
-      await createBookFunction();
-    }
-  };
-
   return (
     <div className="user_form py-4">
       <h1 className="text-center">
-        {mode === "create" ? " Create a New Book" : "Update Book"}{" "}
+        {mode === "create" ? " Create a New Book" : "Update Book"}
       </h1>
       <div className="container py-2 m-auto">
         <div className="user_form-body py-4">
