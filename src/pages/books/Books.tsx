@@ -41,6 +41,7 @@ const Books = () => {
       setTotal(Number(book?.meta?.total));
       setLoading(isLoading);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book]);
 
   if (error) {

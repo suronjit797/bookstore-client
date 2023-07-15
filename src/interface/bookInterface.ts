@@ -7,7 +7,8 @@ export type IBook = {
   publicationDate: Date;
   reviews: IReview[];
   wishList?: boolean;
-  image?: string
+  image?: string;
+  isFinished?: boolean
 };
 
 export type IAuthor = {

@@ -3,6 +3,7 @@ import { IBook } from "../../interface/bookInterface";
 import Card from "react-bootstrap/Card";
 import moment from "moment";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { BsBookmarkXFill, BsBookmarkCheckFill } from "react-icons/bs";
 import "./bookCard.css";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -36,14 +37,11 @@ const BookCard = ({ book }: { book: IBook }) => {
             style={{ height: "300px", position: "relative" }}
           />
         </div>
-        <div className="wishLIst fs-2" title='Add to wish list' onClick={wishListHandler}>
-          {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
-        </div>
         <Link
           to={`/book/${book?._id ? book?._id : ""}`}
           className="text-black text-capitalize"
         >
-          <Card.Body>
+          <Card.Body className="pb-0">
             <Card.Title> {book.title} </Card.Title>
             <Card.Text>
               <div className="d-flex">
@@ -60,6 +58,28 @@ const BookCard = ({ book }: { book: IBook }) => {
             </Card.Text>
           </Card.Body>
         </Link>
+        <div className="p-3 pt-0 d-flex justify-content-end">
+          <div className="d-flex">
+            <div
+              className="wishLIst fs-2 me-2"
+              title="Add to wish list"
+              onClick={wishListHandler}
+            >
+              {wishList ? <AiFillHeart /> : <AiOutlineHeart />}
+            </div>
+            <div
+              className="finishBook fs-2"
+              title="Add to wish list"
+              // onClick={wishListHandler}
+            >
+              {book?.isFinished ? (
+                <BsBookmarkCheckFill className="text-success" />
+              ) : (
+                <BsBookmarkXFill className="text-danger" />
+              )}
+            </div>
+          </div>
+        </div>
       </Card>
     </>
   );
