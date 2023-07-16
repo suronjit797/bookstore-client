@@ -20,7 +20,7 @@ const Books = () => {
     (state) => state.books.filter
   );
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(searchTerm);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const [books, setBooks] = useState<IBook[]>([]);
@@ -88,6 +88,7 @@ const Books = () => {
               type="search"
               name="search"
               id="search"
+              value={search}
               className="form-control rounded-0"
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -100,9 +101,7 @@ const Books = () => {
         <Row>
           <Col lg={2} md={3}>
             <div className="book_sidebar">
-              <BookSideBar
-                setPage={setPage}
-              />
+              <BookSideBar setPage={setPage} />
             </div>
           </Col>
           <Col lg={10} md={9}>
