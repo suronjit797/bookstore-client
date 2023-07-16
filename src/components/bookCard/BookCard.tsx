@@ -12,7 +12,8 @@ import { useUpdateBooksMutation } from "../../redux/features/books/bookApi";
 
 const BookCard = ({ book }: { book: IBook }) => {
   const dispatch = useAppDispatch();
-  const { books } = useAppSelector((state) => state.wishlist);
+  const { wishlist, user } = useAppSelector((state) => state);
+  const books = wishlist.books;
   const [wishList, setWishList] = useState<boolean>(false);
 
   const [updateIsFinished] = useUpdateBooksMutation();
@@ -75,23 +76,27 @@ const BookCard = ({ book }: { book: IBook }) => {
               className="finishBook fs-2"
               // onClick={wishListHandler}
             >
-              {book?.isFinished ? (
-                <BsBookmarkCheckFill
-                  className="text-success"
-                  title="Finished"
-                />
+              {user.isLogging ? (
+                book?.isFinished ? (
+                  <BsBookmarkCheckFill
+                    className="text-success"
+                    title="Finished"
+                  />
+                ) : (
+                  <BsBookmarkXFill
+                    className="text-danger"
+                    title="Add to Finished"
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      updateIsFinished({
+                        id: book._id as string,
+                        data: { ...book, isFinished: true },
+                      })
+                    }
+                  />
+                )
               ) : (
-                <BsBookmarkXFill
-                  className="text-danger"
-                  title="Add to Finished"
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    updateIsFinished({
-                      id: book._id as string,
-                      data: { ...book, isFinished: true },
-                    })
-                  }
-                />
+                ""
               )}
             </div>
           </div>
