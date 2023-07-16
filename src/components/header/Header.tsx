@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import { useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
@@ -5,10 +6,15 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useNavigate } from "react-router-dom";
 import "./header.css";
+import { useAppDispatch } from "../../redux/hooks";
+import { addUser } from "../../redux/features/user/userSlice";
+import { usePostLogoutMutation } from "../../redux/features/user/userApi";
 
 function Header() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [logout] = usePostLogoutMutation(undefined);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -17,10 +23,12 @@ function Header() {
     }
   }, []);
 
-  const logoutHandler = () => {
+  const logoutHandler = async (): Promise<void> => {
     localStorage.clear();
     setIsLogin(false);
     navigate("/signin");
+    dispatch(addUser(null));
+    await logout({});
   };
 
   return (

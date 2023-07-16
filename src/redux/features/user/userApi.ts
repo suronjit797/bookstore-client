@@ -7,6 +7,7 @@ export const registerApi = api.injectEndpoints({
     getMyData: builder.query<TApiResponse<TUser>, undefined>({
       query: () => `/users/me`,
       transformErrorResponse: (response) => response.data,
+      providesTags: ["user"],
     }),
     postRegister: builder.mutation({
       query: (data: TRegister) => ({
@@ -24,6 +25,15 @@ export const registerApi = api.injectEndpoints({
       }),
       transformErrorResponse: (response) => response.data,
     }),
+    postLogout: builder.mutation({
+      query: () => ({
+        url: `/users/logout`,
+        method: "POST",
+        body: {},
+      }),
+      invalidatesTags: ["user"],
+      transformErrorResponse: (response) => response.data,
+    }),
   }),
 });
 
@@ -31,4 +41,5 @@ export const {
   useGetMyDataQuery,
   usePostRegisterMutation,
   usePostLoginMutation,
+  usePostLogoutMutation,
 } = registerApi;
