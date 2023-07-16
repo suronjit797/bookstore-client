@@ -1,4 +1,11 @@
 # Book library -client
 
-## Server Link: https://book-librery.vercel.app/
-## Client Link: https://book-library-client.netlify.app/
+## Server Link:
+
+- live: https://book-librery.vercel.app/
+- gitHub: https://github.com/suronjit797/bookstore-server
+
+## Client Link:
+
+- live: https://book-library-client.netlify.app/
+- gitHub: https://github.com/suronjit797/bookstore-client
