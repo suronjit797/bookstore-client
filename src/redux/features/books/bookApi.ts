@@ -79,6 +79,14 @@ export const productApi = api.injectEndpoints({
       transformErrorResponse: (response) => response.data,
       invalidatesTags: ["books"],
     }),
+    removeBooks: builder.mutation<TBookSingle, string>({
+      query: (id: string) => ({
+        url: `/books/${id}`,
+        method: "DELETE",
+      }),
+      transformErrorResponse: (response) => response.data,
+      invalidatesTags: ["books"],
+    }),
   }),
 });
 
@@ -88,4 +96,5 @@ export const {
   useUpdateBooksMutation,
   useGetSingleBooksQuery,
   usePostBooksMutation,
+  useRemoveBooksMutation,
 } = productApi;

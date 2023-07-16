@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { FormEvent, useState, useEffect } from "react";
-import { Form } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { IBook, IReview } from "../../interface/bookInterface";
 import { useUpdateBooksMutation } from "../../redux/features/books/bookApi";
+import { useAppSelector } from "../../redux/hooks";
 
 const Comments = ({ book }: { book: IBook }) => {
   const [reviewList, setReviewList] = useState<IReview[]>([]);
   const [comment, setComment] = useState("");
+
+  const { isLogging } = useAppSelector((state) => state.user);
 
   const [updateReviewList] = useUpdateBooksMutation();
 
@@ -34,9 +37,22 @@ const Comments = ({ book }: { book: IBook }) => {
           onChange={(e) => setComment(e.target.value)}
           className="form-control rounded-0"
         />
-        <button className="btn btn-success text-nowrap rounded-0" type="submit">
-          Send Review
-        </button>
+        {isLogging ? (
+          <button
+            className="btn btn-success text-nowrap rounded-0"
+            type="submit"
+          >
+            Send Review
+          </button>
+        ) : (
+          <Link
+            to="/signin"
+            className="btn btn-success text-nowrap rounded-0"
+            type="submit"
+          >
+            Send Review
+          </Link>
+        )}
       </Form>
 
       {reviewList.length > 0 &&

@@ -3,14 +3,16 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { TUser } from "../../../interface/authInterface";
 
 interface TInitState {
+  isLogging: boolean;
   data: {
     name: string;
     email: string;
     _id: string;
-  };
+  } | null;
 }
 
 const initialState: TInitState = {
+  isLogging: false,
   data: {
     name: "",
     email: "",
@@ -22,8 +24,9 @@ const userSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
-    addUser: (state, action: PayloadAction<TUser>) => {
+    addUser: (state, action: PayloadAction<TUser | null>) => {
       state.data = action.payload;
+      state.isLogging = Boolean(action.payload);
     },
   },
 });

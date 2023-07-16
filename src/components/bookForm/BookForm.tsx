@@ -13,6 +13,7 @@ import { IBook } from "../../interface/bookInterface";
 import moment from "moment";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { SerializedError } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 type TResponse = {
   data: IBook;
@@ -40,6 +41,7 @@ type TProps = {
 };
 
 const BookForm = ({ mode, data }: TProps) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<IBook>(initialState);
   const [createBook] = usePostBooksMutation();
   const [updateBook] = useUpdateBooksMutation();
@@ -91,9 +93,11 @@ const BookForm = ({ mode, data }: TProps) => {
       if (mode === "create") {
         res = await createBook(data);
         setFormData(initialState);
+        navigate("/books");
       } else if (data?._id) {
         const id = data?._id;
         res = await updateBook({ id, data });
+        navigate(`/book/${id}`);
       }
 
       if (res! && "data" in res) {

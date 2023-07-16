@@ -13,7 +13,6 @@ type TFormData = {
   cPassword: string;
 };
 
-
 const initialState = {
   name: "",
   email: "",
@@ -45,14 +44,16 @@ const Signup: React.FC = () => {
     if (token) {
       navigate("/");
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const submitHandler = async (e: FormEvent<HTMLFormElement>):Promise<void> => {
+  const submitHandler = async (
+    e: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
     if (password !== cPassword) {
       return setErrorMessage("Passwords do not match");
@@ -153,6 +154,11 @@ const Signup: React.FC = () => {
           </Form>
           <div className="mt-4">
             Already have an account? <Link to="/signin"> Login now</Link>
+          </div>
+          <div className="text-center">
+            <Link to="/" className="btn btn-info px-5 mt-3">
+              Go Home
+            </Link>
           </div>
         </div>
       </div>

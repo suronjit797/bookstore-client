@@ -128,12 +128,11 @@ const Signin = () => {
           </div>
 
           <div className="text-center">
-            <div
+            <Link to='/'
               className="btn btn-info px-5 mt-3"
-              onClick={() => navigate("/")}
             >
               Go Home
-            </div>
+            </Link>
           </div>
         </div>
       </div>

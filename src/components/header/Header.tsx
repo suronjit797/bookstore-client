@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink, useNavigate } from "react-router-dom";
-import './header.css'
+import "./header.css";
 
 function Header() {
   const [isLogin, setIsLogin] = useState<boolean>(false);
@@ -43,11 +43,15 @@ function Header() {
             <NavLink to="/wishlist" className="nav-link text-capitalize">
               wishlist
             </NavLink>
+            <NavLink to="/add-new" className="nav-link text-capitalize">
+              add new book
+            </NavLink>
             {isLogin ? (
               <>
-                <NavLink to="/add-new" className="nav-link text-capitalize">
+                {/* <NavLink to="/add-new" className="nav-link text-capitalize">
                   add new book
-                </NavLink>
+                </NavLink> */}
+
                 <Button
                   className="ms-2"
                   onClick={logoutHandler}

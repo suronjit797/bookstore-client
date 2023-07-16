@@ -1,10 +1,11 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
+import { useAppSelector } from "../../redux/hooks";
 
 const AuthRoute = ({ children }: { children: ReactNode }) => {
-  const token = localStorage.getItem("token");
+  const { isLogging } = useAppSelector((state) => state.user);
 
-  if (!token) {
+  if (!isLogging) {
     return <Navigate to="/signin" />;
   }
 
