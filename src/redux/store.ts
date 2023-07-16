@@ -3,11 +3,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import { api } from "./features/api";
 import wishListReducer from "./features/wishList/wishListSlice";
 import userReducer from "./features/user/userSlice";
+import booksReducer from "./features/books/booksSlice";
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     wishlist: wishListReducer,
+    books: booksReducer,
 
     [api.reducerPath]: api.reducer,
   },

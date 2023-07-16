@@ -4,18 +4,19 @@ import { bookEnum } from "../../shared/constants";
 import { useGetYearsQuery } from "../../redux/features/books/bookApi";
 import Loading from "../Loading/Loading";
 import { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setFilter } from "../../redux/features/books/booksSlice";
 
 interface BookSideBarProps {
-  setGenreFilter: (genre: string) => void;
-  setYearFilter: (year: string) => void;
   setPage: (num: number) => void;
 }
 
-const BookSideBar: React.FC<BookSideBarProps> = ({
-  setGenreFilter,
-  setYearFilter,
-  setPage,
-}) => {
+const BookSideBar: React.FC<BookSideBarProps> = ({ setPage }) => {
+  const dispatch = useAppDispatch();
+  const { genreFilter, yearFilter } = useAppSelector(
+    (state) => state.books.filter
+  );
+
   const [yearList, setYearList] = useState<string[]>([]);
   const [limit, setLimit] = useState<number>(10);
   const {
@@ -47,12 +48,13 @@ const BookSideBar: React.FC<BookSideBarProps> = ({
       <h5> Genre: </h5>
       <div className="ps-3">
         <Form.Check
+          checked={genreFilter === ""}
           label="All Genres"
           name="genre"
           type="radio"
           id={`radio-genre-all`}
           onClick={() => {
-            setGenreFilter("");
+            dispatch(setFilter({ genreFilter: "" }));
             setPage(1);
           }}
         />
@@ -60,12 +62,13 @@ const BookSideBar: React.FC<BookSideBarProps> = ({
           <Form.Check
             key={genre}
             label={genre}
+            checked={genreFilter === genre}
             name="genre"
             type="radio"
             className="text-capitalize"
             id={`radio-${genre}`}
             onClick={() => {
-              setGenreFilter(genre);
+              dispatch(setFilter({ genreFilter: genre }));
               setPage(1);
             }}
           />
@@ -75,11 +78,12 @@ const BookSideBar: React.FC<BookSideBarProps> = ({
       <div className="ps-3">
         <Form.Check
           label="All Years"
+          checked={yearFilter === ""}
           name="year"
           type="radio"
           id={`radio-year-all`}
           onClick={() => {
-            setYearFilter("");
+            dispatch(setFilter({ yearFilter: "" }));
             setPage(1);
           }}
         />
@@ -89,9 +93,11 @@ const BookSideBar: React.FC<BookSideBarProps> = ({
             label={year}
             name="year"
             type="radio"
+            checked={yearFilter === year}
             id={`radio-${year}`}
             onClick={() => {
-              setYearFilter(year);
+              // setYearFilter(year);
+              dispatch(setFilter({ yearFilter: year }));
               setPage(1);
             }}
           />

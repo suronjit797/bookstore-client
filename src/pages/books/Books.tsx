@@ -11,11 +11,15 @@ import { BsSearch } from "react-icons/bs";
 import "./books.css";
 import BookSideBar from "../../components/bookSideBar/BookSideBar";
 import Pagination from "react-bootstrap/Pagination";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setFilter } from "../../redux/features/books/booksSlice";
 
 const Books = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [genreFilter, setGenreFilter] = useState("");
-  const [yearFilter, setYearFilter] = useState("");
+  const dispatch = useAppDispatch();
+  const { genreFilter, searchTerm, yearFilter } = useAppSelector(
+    (state) => state.books.filter
+  );
+
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -32,10 +36,11 @@ const Books = () => {
   } = useGetBooksQuery(
     `${genreFilter ? "genre=" + genreFilter + "&" : ""}${
       yearFilter ? "publicationDate=" + yearFilter + "&" : ""
-    }query=${searchTerm}&limit=${limit}&page=${page}`,
+    }${
+      searchTerm ? "query=" + searchTerm + "&" : ""
+    }&limit=${limit}&page=${page}`,
     { refetchOnReconnect: true }
   );
-
   useEffect(() => {
     if (book?.success) {
       setBooks(book?.data);
@@ -52,7 +57,7 @@ const Books = () => {
   const searchHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    setSearchTerm(search);
+    dispatch(setFilter({ searchTerm: search }));
   };
 
   const items: JSX.Element[] = [];
@@ -96,8 +101,6 @@ const Books = () => {
           <Col lg={2} md={3}>
             <div className="book_sidebar">
               <BookSideBar
-                setGenreFilter={setGenreFilter}
-                setYearFilter={setYearFilter}
                 setPage={setPage}
               />
             </div>
