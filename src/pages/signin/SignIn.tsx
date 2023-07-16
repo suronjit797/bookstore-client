@@ -5,19 +5,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { usePostLoginMutation } from "../../redux/features/user/userApi";
 import Swal from "sweetalert2";
 import { IErrorPayload } from "../../interface/authInterface";
+import { TResponse } from "../../interface/globalInterface";
 
-type TFormData = {
+type TSignInData = {
   email: string;
   password: string;
-};
-
-type TResponse = {
-  data: {
-    accessToken: string;
-  };
-  message: string;
-  statusCode: number | string;
-  success: boolean;
 };
 
 const initialState = {
@@ -27,7 +19,7 @@ const initialState = {
 
 const Signin = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<TFormData>(initialState);
+  const [formData, setFormData] = useState<TSignInData>(initialState);
   const [loginPost] = usePostLoginMutation();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -61,7 +53,9 @@ const Signin = () => {
     e.preventDefault();
     const res = await loginPost(formData);
     if ("data" in res) {
-      const { data, message } = res.data as TResponse;
+      const { data, message } = res.data as TResponse<{
+        accessToken: string;
+      }>;
 
       localStorage.setItem("token", data.accessToken);
       navigate("/");
@@ -128,9 +122,7 @@ const Signin = () => {
           </div>
 
           <div className="text-center">
-            <Link to='/'
-              className="btn btn-info px-5 mt-3"
-            >
+            <Link to="/" className="btn btn-info px-5 mt-3">
               Go Home
             </Link>
           </div>

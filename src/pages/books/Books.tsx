@@ -32,7 +32,8 @@ const Books = () => {
   } = useGetBooksQuery(
     `${genreFilter ? "genre=" + genreFilter + "&" : ""}${
       yearFilter ? "publicationDate=" + yearFilter + "&" : ""
-    }query=${searchTerm}&limit=${limit}&page=${page}`
+    }query=${searchTerm}&limit=${limit}&page=${page}`,
+    { refetchOnReconnect: true }
   );
 
   useEffect(() => {

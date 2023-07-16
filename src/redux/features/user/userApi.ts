@@ -1,36 +1,10 @@
-import { TUser } from "../../../interface/authInterface";
-import { IError } from "../../../interface/globalInterface";
+import { TLogin, TRegister, TUser } from "../../../interface/authInterface";
+import { TApiResponse } from "../../../interface/globalInterface";
 import { api } from "../api";
-
-type TRegister = {
-  name: string;
-  email: string;
-  password: string;
-};
-type TLogin = {
-  email: string;
-  password: string;
-};
-
-export type TUserResponse = {
-  message: string;
-  statusCode: number;
-} & (
-  | {
-      data: TUser;
-      success: true;
-      meta?: {
-        page?: number;
-        limit?: number;
-        total?: number;
-      };
-    }
-  | IError
-);
 
 export const registerApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getMyData: builder.query<TUserResponse, undefined>({
+    getMyData: builder.query<TApiResponse<TUser>, undefined>({
       query: () => `/users/me`,
       transformErrorResponse: (response) => response.data,
     }),

@@ -33,7 +33,11 @@ const Book = () => {
 
   const { data: user } = useAppSelector((state) => state.user);
 
-  const { data: book, isLoading } = useGetSingleBooksQuery(bookId as string);
+  const { data: book, isLoading } = useGetSingleBooksQuery(bookId as string, {
+    refetchOnReconnect: true,
+    pollingInterval: 6000,
+    refetchOnMountOrArgChange: true,
+  });
   const [removeBook] = useRemoveBooksMutation();
 
   useEffect(() => {

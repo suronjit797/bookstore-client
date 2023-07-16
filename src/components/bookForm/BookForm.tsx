@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import Swal from "sweetalert2";
 import { IErrorPayload } from "../../interface/authInterface";
 import {
-  TBookSingle,
   usePostBooksMutation,
   useUpdateBooksMutation,
 } from "../../redux/features/books/bookApi";
@@ -14,12 +13,11 @@ import moment from "moment";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { SerializedError } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
+import { TApiResponse, TResponse } from "../../interface/globalInterface";
 
-type TResponse = {
-  data: IBook;
-  message: string;
-  statusCode: number | string;
-  success: boolean;
+type TProps = {
+  mode: "edit" | "create";
+  data?: IBook;
 };
 
 const initialState: IBook = {
@@ -33,11 +31,6 @@ const initialState: IBook = {
     name: "",
   },
   reviews: [],
-};
-
-type TProps = {
-  mode: "edit" | "create";
-  data?: IBook;
 };
 
 const BookForm = ({ mode, data }: TProps) => {
@@ -85,7 +78,7 @@ const BookForm = ({ mode, data }: TProps) => {
       };
       let res:
         | {
-            data: TBookSingle;
+            data: TApiResponse<IBook>;
           }
         | {
             error: FetchBaseQueryError | SerializedError;
@@ -101,7 +94,7 @@ const BookForm = ({ mode, data }: TProps) => {
       }
 
       if (res! && "data" in res) {
-        const { message } = res.data as TResponse;
+        const { message } = res.data as TResponse<IBook>;
 
         await Toast.fire({
           icon: "success",
