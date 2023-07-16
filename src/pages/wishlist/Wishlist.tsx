@@ -13,12 +13,12 @@ const Wishlist = () => {
     <Layout>
       <Container>
         <Row xs={1} sm={2} md={3} lg={4} className="my-3 g-4">
-          {books.length > 0 &&
+          {books.length > 0 ?
             books.map((book) => (
               <Col key={book._id}>
                 <BookCard book={book} />
               </Col>
-            ))}
+            )) : <p className="text-danger"> No data found. </p> }
         </Row>
       </Container>
     </Layout>

@@ -41,7 +41,7 @@ const Books = () => {
       setTotal(Number(book?.meta?.total));
       setLoading(isLoading);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book]);
 
   if (error) {
@@ -103,12 +103,15 @@ const Books = () => {
           </Col>
           <Col lg={10} md={9}>
             <Row xs={1} sm={2} md={2} lg={3} className="mb-3 mt-1 g-4">
-              {books.length > 0 &&
+              {books.length > 0 ? (
                 books.map((book) => (
                   <Col key={book._id}>
                     <BookCard book={book} />
                   </Col>
-                ))}
+                ))
+              ) : (
+                <p className="text-danger"> No data found </p>
+              )}
             </Row>
 
             <div className="my-4">

@@ -1,3 +1,5 @@
+import { TUser } from "../../../interface/authInterface";
+import { IError } from "../../../interface/globalInterface";
 import { api } from "../api";
 
 type TRegister = {
@@ -10,8 +12,28 @@ type TLogin = {
   password: string;
 };
 
+export type TUserResponse = {
+  message: string;
+  statusCode: number;
+} & (
+  | {
+      data: TUser;
+      success: true;
+      meta?: {
+        page?: number;
+        limit?: number;
+        total?: number;
+      };
+    }
+  | IError
+);
+
 export const registerApi = api.injectEndpoints({
   endpoints: (builder) => ({
+    getMyData: builder.query<TUserResponse, undefined>({
+      query: () => `/users/me`,
+      transformErrorResponse: (response) => response.data,
+    }),
     postRegister: builder.mutation({
       query: (data: TRegister) => ({
         url: `/users/signup`,
@@ -31,4 +53,8 @@ export const registerApi = api.injectEndpoints({
   }),
 });
 
-export const { usePostRegisterMutation, usePostLoginMutation } = registerApi;
+export const {
+  useGetMyDataQuery,
+  usePostRegisterMutation,
+  usePostLoginMutation,
+} = registerApi;

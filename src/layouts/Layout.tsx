@@ -1,13 +1,27 @@
 import Footer from "../components/footer/Footer";
 import Header from "../components/header/Header";
+import { useGetMyDataQuery } from "../redux/features/user/userApi";
+import { addUser } from "../redux/features/user/userSlice";
+import { useAppDispatch } from "../redux/hooks";
 import "./layout.css";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const dispatch = useAppDispatch();
+
+  const { data, isLoading } = useGetMyDataQuery(undefined);
+
+  useEffect(() => {
+    if (data?.success) {
+      dispatch(addUser(data.data));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   return (
     <div className="layout">
       <Header />
